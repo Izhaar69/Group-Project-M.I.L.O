@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ModernTech HR System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#"><i class="fas fa-users me-2"></i>ModernTech HR</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link active" href="#dashboard"><i class="fas fa-tachometer-alt me-1"></i>Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#employees"><i class="fas fa-user-tie me-1"></i>Employees</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#payroll"><i class="fas fa-money-check-alt me-1"></i>Payroll</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#attendance"><i class="fas fa-calendar-check me-1"></i>Attendance</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" id="logoutBtn"><i class="fas fa-sign-out-alt me-1"></i>Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" data-bs-backdrop="static" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title"><i class="fas fa-lock me-2"></i>HR System Login</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-users fa-3x text-primary mb-3"></i>
+                        <h4>ModernTech HR Portal</h4>
+                        <p class="text-muted">Enter credentials: Matthewsexybeast / Matthewsexybeast123</p>
+                    </div>
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <input type="text" class="form-control" id="username" placeholder="Username" required>
+                        </div>
+                        <div class="mb-3">
+                            <input type="password" class="form-control" id="password" placeholder="Password" required>
+                        </div>
+                        <div class="alert alert-danger d-none" id="loginError">Invalid credentials</div>
+                        <button type="submit" class="btn btn-primary w-100"><i class="fas fa-sign-in-alt me-2"></i>Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mt-4" id="mainContent" style="display: none;">
+        <!-- Dashboard -->
+        <section id="dashboard">
+            <h2 class="mb-4"><i class="fas fa-tachometer-alt me-2"></i>HR Dashboard</h2>
+            <div class="row mb-4">
+                <div class="col-md-3 col-sm-6 mb-3"><div class="card stat-card bg-primary text-white"><div class="card-body"><h5>Total Employees</h5><h2 id="totalEmployees">0</h2></div></div></div>
+                <div class="col-md-3 col-sm-6 mb-3"><div class="card stat-card bg-success text-white"><div class="card-body"><h5>Avg Attendance</h5><h2 id="avgAttendance">0%</h2></div></div></div>
+                <div class="col-md-3 col-sm-6 mb-3"><div class="card stat-card bg-warning text-white"><div class="card-body"><h5>Pending Requests</h5><h2 id="pendingRequests">0</h2></div></div></div>
+                <div class="col-md-3 col-sm-6 mb-3"><div class="card stat-card bg-info text-white"><div class="card-body"><h5>Monthly Payroll</h5><h2 id="monthlyPayroll">R0</h2></div></div></div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <div class="card-header bg-light"><h5 class="mb-0">Quick Actions</h5></div>
+                        <div class="card-body">
+                            <button class="btn btn-outline-primary w-100 mb-2" onclick="showSection('employees')"><i class="fas fa-user-plus me-2"></i>Manage Employees</button>
+                            <button class="btn btn-outline-success w-100 mb-2" onclick="showSection('payroll')"><i class="fas fa-calculator me-2"></i>Run Payroll</button>
+                            <button class="btn btn-outline-warning w-100" onclick="showSection('attendance')"><i class="fas fa-calendar-plus me-2"></i>Manage Leave</button>
+                        </div>
+                    </div>
+                </div>
+                
+               <div class="container">
+        <h2>Department Distribution</h2>
+        <canvas id="departmentChart"></canvas>
+    </div>
+
+                    
+                     
+  </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+<!-- EMPLOYEE FEEDBACK FORM SECTION -->
+ <li class="nav-item">
+  <a class="nav-link" href="#" onclick="showSection('feedbackSection')">
+    <i class="fas fa-comment-dots me-1"></i>Feedback
+  </a>
+</li>
+
+<section id="feedbackSection" class="container mt-4" style="display: none;">
+    <div class="text-center mb-4">
+        <h2 class="fw-bold text-primary">
+            <i class="fas fa-comment-dots me-2"></i>Employee Feedback
+        </h2>
+        <p class="text-muted">We value your feedback — help us improve the workplace.</p>
+    </div>
+
+    <div class="card shadow-lg p-4 rounded-4">
+        <form id="employeeFeedbackForm" class="row g-3">
+
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">Employee Name</label>
+                <input type="text" class="form-control form-control-lg" id="feedbackName" placeholder="Enter your full name" required>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">Department</label>
+                <select class="form-select form-select-lg" id="feedbackDepartment" required>
+                    <option value="">Choose Department</option>
+                    <option>HR</option>
+                    <option>Finance</option>
+                    <option>IT</option>
+                    <option>Development</option>
+                    <option>Customer Support</option>
+                </select>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">Rating</label>
+                <select class="form-select form-select-lg" id="feedbackRating" required>
+                    <option value="">Rate your experience (1–5)</option>
+                    <option value="1">1 - Poor</option>
+                    <option value="2">2 - Fair</option>
+                    <option value="3">3 - Good</option>
+                    <option value="4">4 - Very Good</option>
+                    <option value="5">5 - Excellent</option>
+                </select>
+            </div>
+
+            <div class="col-12">
+                <label class="form-label fw-semibold">Feedback Message</label>
+                <textarea class="form-control form-control-lg" id="feedbackMessage" rows="4" placeholder="Write your feedback here..." required></textarea>
+            </div>
+
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary btn-lg w-100 rounded-3">
+                    <i class="fas fa-paper-plane me-2"></i>Submit Feedback
+                </button>
+            </div>
+
+        </form>
+    </div>
+</section>
+
+        <!-- Employees -->
+ <section id="employees" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-user-tie me-2"></i>Employee Management</h2>
+                <button class="btn btn-primary" onclick="showAddForm()"><i class="fas fa-plus me-2"></i>Add Employee</button>
+            </div>
+            <div class="card mb-4" id="addForm" style="display: none;">
+                <div class="card-header bg-primary text-white"><h5 class="mb-0">Add New Employee</h5></div>
+                <div class="card-body">
+                    <form id="employeeForm" onsubmit="addEmployee(event)">
+                        <div class="row">
+                            <div class="col-md-6 mb-2"><input type="text" class="form-control" placeholder="Full Name" required></div>
+                            <div class="col-md-6 mb-2"><input type="email" class="form-control" placeholder="Email" required></div>
+                            <div class="col-md-6 mb-2"><select class="form-control" required><option value="">Department</option><option>Development</option><option>HR</option><option>QA</option><option>Sales</option><option>Marketing</option></select></div>
+                            <div class="col-md-6 mb-2"><input type="text" class="form-control" placeholder="Position" required></div>
+                            <div class="col-md-6 mb-2"><input type="number" class="form-control" placeholder="Salary" required></div>
+                            <div class="col-md-6 mb-2"><input type="tel" class="form-control" placeholder="Phone" required></div>
+                        </div>
+                        <div class="d-flex gap-2 mt-2">
+                            <button type="submit" class="btn btn-success"><i class="fas fa-save me-2"></i>Save</button>
+                            <button type="button" class="btn btn-secondary" onclick="hideAddForm()"><i class="fas fa-times me-2"></i>Cancel</button>
+                        </div>
+                       <div class="modal fade" id="employeeDetailsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content shadow-lg">
+
+            <!-- Header -->
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-id-card me-2"></i> Employee Details
+                </h5>
+                <button class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Body -->
+            <div class="modal-body">
+
+                <div class="row">
+
+                    <!-- Left: Profile -->
+                    <div class="col-md-4 text-center border-end">
+                        <img id="detailPhoto" 
+                             src="https://via.placeholder.com/150"
+                             class="rounded-circle mb-3 shadow"
+                             width="140" height="140">
+
+                        <h4 id="detailName" class="fw-bold"></h4>
+                        <p id="detailPosition" class="text-muted"></p>
+                        <span id="detailDepartment" class="badge bg-primary px-3 py-2"></span>
+                    </div>
+
+                    <!-- Right: Info -->
+                    
+                      <div class="employee-info-card"></div>
+                        <h5 class="mb-3">
+                            <i class="fas fa-info-circle me-2"></i>Employee Information
+                        </h5>
+
+                        <ul class="list-group employee-info-list shadow-sm">
+                            <li class="list-group-item d-flex justify-content-between">
+                                <strong>Email:</strong>
+                                <span id="detailEmail"></span>
+                            </li>
+
+                            <li class="list-group-item d-flex justify-content-between">
+                                <strong>Salary:</strong>
+                                <span id="detailSalary"></span>
+                            </li>
+
+                            <li class="list-group-item d-flex justify-content-between">
+                                <strong>Contact:</strong>
+                                <span id="detailContact"></span>
+                            </li>
+
+                            <li class="list-group-item">
+                                <strong>Employment History:</strong><br>
+                                <span id="detailHistory"></span>
+                            </li>
+                        </ul>
+
+                        <div class="mt-4 text-end">
+                            <button class="btn btn-outline-primary">
+                                <i class="fas fa-file-alt me-2"></i>Generate Report
+                            </button>
+
+                            <button class="btn btn-success">
+                                <i class="fas fa-envelope me-2"></i>Email
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+  </div>
+                    </form>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead><tr><th>Name</th><th>Department</th><th>Position</th><th>Salary</th><th>Contact</th><th>Actions</th></tr></thead>
+                            <tbody id="employeesTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Payroll -->
+        <section id="payroll" style="display: none;">
+            <h2 class="mb-4"><i class="fas fa-money-check-alt me-2"></i>Payroll Management</h2>
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white"><h5 class="mb-0">Generate Payslip</h5></div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-8"><select class="form-control" id="employeeSelect" onchange="updatePayslip()"></select></div>
+                        <div class="col-md-4"><input type="month" class="form-control" id="payrollMonth" value="2025-07" onchange="updatePayslip()"></div>
+                    </div>
+                    <div class="card" id="payslipPreview" style="display: none;">
+                        <div class="card-body">
+                            <h5 class="text-center">PAYSLIP PREVIEW</h5>
+                            <div class="row mb-2"><div class="col-6"><strong>Employee:</strong></div><div class="col-6" id="previewName"></div></div>
+                            <div class="row mb-2"><div class="col-6"><strong>Period:</strong></div><div class="col-6" id="previewPeriod"></div></div>
+                            <hr>
+                            <div class="row mb-1"><div class="col-6">Basic Salary:</div><div class="col-6 text-end">R<span id="previewBasic">0</span></div></div>
+                            <div class="row mb-1"><div class="col-6">Leave Deductions:</div><div class="col-6 text-end text-danger">- R<span id="previewDeductions">0</span></div></div>
+                            <div class="row mb-1"><div class="col-6">Tax (15%):</div><div class="col-6 text-end text-danger">- R<span id="previewTax">0</span></div></div>
+                            <hr>
+                            <div class="row bg-light py-2"><div class="col-6"><strong>NET PAY:</strong></div><div class="col-6 text-end"><strong>R<span id="previewNet">0</span></strong></div></div>
+                        </div>
+                    </div>
+                    <button class="btn btn-success w-100 mt-3" onclick="printPayslip()" id="printBtn" disabled><i class="fas fa-print me-2"></i>Print Payslip</button>
+                    
+                    <!-- Payroll Download Option -->
+<div id="payslipPreview" style="display:none; border:1px solid #ccc; padding:15px; margin-bottom:10px;">
+    <p><strong>Employee:</strong> <span id="previewName"></span></p>
+    <p><strong>Period:</strong> <span id="previewPeriod"></span></p>
+    <p>Basic Salary: R<span id="previewBasic"></span></p>
+    <p>Leave Deductions: -R<span id="previewDeductions"></span></p>
+    <p>Tax: -R<span id="previewTax"></span></p>
+    <div class="total">NET PAY: R<span id="previewNet"></span></div>
+</div>
+
+<button class="btn btn-success w-100 mt-3" id="printBtn" onclick="downloadPayslip()" enabled>
+    <i class="fas fa-file-download me-2"></i>Download Payslip
+</button>
+
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header bg-info text-white"><h5 class="mb-0">Payroll Summary</h5></div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead><tr><th>Employee</th><th>Hours Worked</th><th>Leave Hours</th><th>Final Salary</th></tr></thead>
+                            <tbody id="payrollTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Attendance -->
+        <section id="attendance" style="display: none;">
+            <h2 class="mb-4"><i class="fas fa-calendar-check me-2"></i>Attendance & Leave</h2>
+            <div class="card mb-4">
+                <div class="card-header bg-warning"><h5 class="mb-0">Submit Leave Request</h5></div>
+                <div class="card-body">
+                    <form id="leaveForm" onsubmit="submitLeave(event)">
+                        <div class="row">
+                            <div class="col-md-6 mb-2"><select class="form-control" id="leaveEmployee" required><option value="">Select Employee</option></select></div>
+                            <div class="col-md-6 mb-2"><select class="form-control" required><option value="">Leave Type</option><option>Sick Leave</option><option>Annual Leave</option><option>Personal</option></select></div>
+                            <div class="col-md-6 mb-2"><input type="date" class="form-control" required></div>
+                            <div class="col-md-6 mb-2"><input type="date" class="form-control" required></div>
+                            <div class="col-12 mb-2"><textarea class="form-control" rows="2" placeholder="Reason" required></textarea></div>
+                        </div>
+                        <button type="submit" class="btn btn-warning w-100"><i class="fas fa-paper-plane me-2"></i>Submit Request</button>
+                    </form>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <div class="card-header bg-danger text-white"><h5 class="mb-0">Attendance Summary</h5></div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead><tr><th>Employee</th><th>Present</th><th>Absent</th><th>Rate</th></tr></thead>
+                                    <tbody id="attendanceTable"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <div class="card-header bg-info text-white"><h5 class="mb-0">Leave Requests</h5></div>
+                        <div class="card-body">
+                            <div id="leaveRequests"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+<!-- Link to JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+   
+
+</body>
+</html>
